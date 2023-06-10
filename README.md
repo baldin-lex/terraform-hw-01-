@@ -38,7 +38,7 @@ https://console.cloud.yandex.ru/folders/<ваш cloud_id>/vpc/security-groups.
 - скриншот ЛК Yandex Cloud с созданной ВМ,
    >    ![terraform_02_01](jpeg/1.jpg)
 - скриншот успешного подключения к консоли ВМ через ssh,
-   >    ![terraform_02_01](jpeg/2.jpg)
+   >    ![terraform_02_02](jpeg/2.jpg)
 - ответы на вопросы - *в тексте задания выше*
 
 
