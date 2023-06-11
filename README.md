@@ -52,16 +52,77 @@ https://console.cloud.yandex.ru/folders/<ваш cloud_id>/vpc/security-groups.
 
 1. Изучите файлы проекта.
 2. Замените все "хардкод" **значения** для ресурсов **yandex_compute_image** и **yandex_compute_instance** на **отдельные** переменные. К названиям переменных ВМ добавьте в начало префикс **vm_web_** .  Пример: **vm_web_name**.
-2. Объявите нужные переменные в файле variables.tf, обязательно указывайте тип переменной. Заполните их **default** прежними значениями из main.tf. 
-3. Проверьте terraform plan (изменений быть не должно). 
+   > ```bash
+   >  data "yandex_compute_image" "ubuntu" {
+   >    family = var.vm_web_image_name
+   >    }
+   >    
+   >    resource "yandex_compute_instance" "platform" {
+   >      name        = var.vm_web_instance_name
+   >      platform_id = "standard-v1"
+   >      resources {
+   >      cores         = var.vm_web_cores
+   >      memory        = var.vm_web_memory
+   >      core_fraction = var.vm_web_core_fraction  
+   >      }
+   >      ```
+3. Объявите нужные переменные в файле variables.tf, обязательно указывайте тип переменной. Заполните их **default** прежними значениями из main.tf. 
+   > ```bash
+   > ### yandex_compute_image vars
+   > 
+   > variable "vm_web_image_name" {
+   >   type        = string
+   >   default     = "ubuntu-2004-lts"
+   >   description = "release_name_of_image"
+   > }
+   > 
+   > ### yandex_compute_instance vars
+   > 
+   > variable "vm_web_instance_name" {
+   >   type        = string
+   >   default     = "netology-develop-platform-web"
+   >   description = "name_of_instance"
+   > }
+   > 
+   > variable "vm_web_cores" {
+   >   type        = number
+   >   default     = 2
+   >   description = "count_of_cores_vm"
+   > }
+   > 
+   > variable "vm_web_memory" {
+   >   type        = number
+   >   default     = 2
+   >   description = "count_of_memory_vm"
+   > }
+   > 
+   > variable "vm_web_core_fraction" {
+   >   type        = number
+   >   default     = 100
+   >   description = "core_fraction_of_vm"
+   > }
+   > ```
 
-
+4. Проверьте terraform plan (изменений быть не должно). 
+   > ```bash
+   > oot@debian:/home/baldin/ter-homeworks/02/src# terraform plan
+   > yandex_vpc_network.develop: Refreshing state... [id=enp5sviqjetfu9buhd22]
+   > yandex_vpc_subnet.develop: Refreshing state... [id=e9brln1338q1s5hokufh]
+   > yandex_compute_instance.platform: Refreshing state... [id=fhm23msti5eq166tcipo]
+   > 
+   > Note: Objects have changed outside of Terraform
+   > ```
+   ---
+   
 ### Задание 3
 
 1. Создайте в корне проекта файл 'vms_platform.tf' . Перенесите в него все переменные первой ВМ.
 2. Скопируйте блок ресурса и создайте с его помощью вторую ВМ(в файле main.tf): **"netology-develop-platform-db"** ,  cores  = 2, memory = 2, core_fraction = 20. Объявите ее переменные с префиксом **vm_db_** в том же файле('vms_platform.tf').
 3. Примените изменения.
 
+   >    ![terraform_02_02](jpeg/3.jpg)
+
+---
 
 ### Задание 4
 
