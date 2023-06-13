@@ -142,6 +142,7 @@ https://console.cloud.yandex.ru/folders/<ваш cloud_id>/vpc/security-groups.
 1. В файле locals.tf опишите в **одном** local-блоке имя каждой ВМ, используйте интерполяцию ${..} с несколькими переменными по примеру из лекции.
 2. Замените переменные с именами ВМ из файла variables.tf на созданные вами local переменные.
 3. Примените изменения.
+
    > *Если я правильно понял задание, то:*
    > 1. Заполнил **locals.tf**
    > ```bash
@@ -151,7 +152,7 @@ https://console.cloud.yandex.ru/folders/<ваш cloud_id>/vpc/security-groups.
    >   instance = "platform"
    > }
    > ```
-   > 2. Указал имён ВМ при помощи local переменных (причем указывал я их уже в `main.tf`, так как в `variables` их не получается указать)
+   > 2. Указал имён ВМ при помощи local переменных (причем указывал я их уже в `main.tf`, так как в `variables` переменные не указать)
    > ```bash
    > name = "${ local.org }-${ local.project }-${ local.instance }-web"
    >   ```
@@ -164,48 +165,50 @@ https://console.cloud.yandex.ru/folders/<ваш cloud_id>/vpc/security-groups.
 ### Задание 6
 
 1. Вместо использования 3-х переменных  ".._cores",".._memory",".._core_fraction" в блоке  resources {...}, объедените их в переменные типа **map** с именами "vm_web_resources" и "vm_db_resources".
+
+   > *Переменные типа `map`:*
+   > ```bash
+   > variable vm_db_resources {
+   >   type = map
+   >   default = {
+   >     cores = 2
+   >     memory = 4
+   >     core_fraction = 20
+   >   }
+   > }
+   > 
+   > variable vm_web_resources {
+   >   type = map
+   >   default = {
+   >     cores = 2
+   >     memory = 4
+   >     core_fraction = 100
+   >   }
+   > }
+   > ```
+   > 
+   > *Новый вид блока `resources` (на примере `vm_db_`):*
+   > ```bash
+   >   resources {
+   >     cores         = var.vm_db_resources["cores"]
+   >     memory        = var.vm_db_resources["memory"]
+   >     core_fraction = var.vm_db_resources["core_fraction"]
+   > ```    
+
 2. Так же поступите с блоком **metadata {serial-port-enable, ssh-keys}**, эта переменная должна быть общая для всех ваших ВМ.
+
+   > *Тут я не совсем понял. Ведь у нас и так ключ хранится в `personal.auto.tfvars` и используется для всех*
+
 3. Найдите и удалите все более не используемые переменные проекта.
 4. Проверьте terraform plan (изменений быть не должно).
 
-------
-
-## Дополнительные задания (со звездочкой*)
-
-**Настоятельно рекомендуем выполнять все задания под звёздочкой.**   
-Их выполнение поможет глубже разобраться в материале. Задания под звёздочкой дополнительные (необязательные к выполнению) и никак не повлияют на получение вами зачета по этому домашнему заданию. 
-
-### Задание 7*
-
-Изучите содержимое файла console.tf. Откройте terraform console, выполните следующие задания: 
-
-1. Напишите, какой командой можно отобразить **второй** элемент списка test_list?
-2. Найдите длину списка test_list с помощью функции length(<имя переменной>).
-3. Напишите, какой командой можно отобразить значение ключа admin из map test_map ?
-4. Напишите interpolation выражение, результатом которого будет: "John is admin for production server based on OS ubuntu-20-04 with X vcpu, Y ram and Z virtual disks", используйте данные из переменных test_list, test_map, servers и функцию length() для подстановки значений.
-
-В качестве решения предоставьте необходимые команды и их вывод.
-
-------
-### Правила приема работы
-
-В git-репозитории, в котором было выполнено задание к занятию "Введение в Terraform", создайте новую ветку terraform-02, закомитьте в эту ветку свой финальный код проекта. Ответы на задания и необходимые скриншоты оформите в md-файле в ветке terraform-02.
-
-В качестве результата прикрепите ссылку на ветку terraform-02 в вашем репозитории.
-
-**ВАЖНО! Удалите все созданные ресурсы**.
-
-
-### Критерии оценки
-
-Зачёт:
-
-* выполнены все задания;
-* ответы даны в развёрнутой форме;
-* приложены соответствующие скриншоты и файлы проекта;
-* в выполненных заданиях нет противоречий и нарушения логики.
-
-На доработку:
-
-* задание выполнено частично или не выполнено вообще;
-* в логике выполнения заданий есть противоречия и существенные недостатки. 
+   > *Результат `terraform plan`:*
+   > ```bash
+   > root@debian:/home/baldin/ter-homeworks/02/src# terraform plan
+   > yandex_vpc_network.develop: Refreshing state... [id=enpj1umoldup8i9rplsk]
+   > yandex_vpc_subnet.develop: Refreshing state... [id=e9b2lb0j25ug7g5gitjm]
+   > yandex_compute_instance.platform-db: Refreshing state... [id=fhmjigjf75lm3u30mvfi]
+   > yandex_compute_instance.platform: Refreshing state... [id=fhm0q0d1v5rivvjfpbg5]
+   > 
+   > Note: Objects have changed outside of Terraform
+   > ```
