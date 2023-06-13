@@ -131,13 +131,35 @@ https://console.cloud.yandex.ru/folders/<ваш cloud_id>/vpc/security-groups.
 
 В качестве решения приложите вывод значений ip-адресов команды ```terraform output```
 
+   > ```bash
+   > root@debian:/home/baldin/ter-homeworks/02/src# terraform output
+   > db_instance_public_ip = "158.160.39.211"
+   > web_instance_public_ip = "158.160.104.47"
+   > ```
 
 ### Задание 5
 
 1. В файле locals.tf опишите в **одном** local-блоке имя каждой ВМ, используйте интерполяцию ${..} с несколькими переменными по примеру из лекции.
 2. Замените переменные с именами ВМ из файла variables.tf на созданные вами local переменные.
 3. Примените изменения.
-
+   > *Если я правильно понял задание, то:*
+   > 1. Заполнил **locals.tf**
+   > ```bash
+   > locals {
+   >   org      = "netology"
+   >   project  = "develop"
+   >   instance = "platform"
+   > }
+   > ```
+   > 2. Указал имён ВМ при помощи local переменных (причем указывал я их уже в `main.tf`, так как в `variables` их не получается указать)
+   > ```bash
+   > name = "${ local.org }-${ local.project }-${ local.instance }-web"
+   >   ```
+   >   ```bash
+   > name = "${ local.org }-${ local.project }-${ local.instance }-db"
+   > ```
+   > 3. Пересоздал инфраструктуру. Имена инстансов на месте:
+   >    ![terraform_02_02](jpeg/4.jpg)
 
 ### Задание 6
 
