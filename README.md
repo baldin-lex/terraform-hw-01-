@@ -197,7 +197,16 @@ https://console.cloud.yandex.ru/folders/<ваш cloud_id>/vpc/security-groups.
 
 2. Так же поступите с блоком **metadata {serial-port-enable, ssh-keys}**, эта переменная должна быть общая для всех ваших ВМ.
 
-   > *Тут я не совсем понял. Ведь у нас и так ключ хранится в `personal.auto.tfvars` и используется для всех*
+   > *В `variables.tf` прямо указал данные для авторизации на ВМ по ssh:*
+   > ```bash
+   > variable auth-ssh {
+   >   type = map
+   >   default = {
+   >     ssh-keys = "ubuntu:ssh-rsa AAAAB3.................AqNVz baldin@debian"
+   >   }
+   > }
+   > ```
+   > *A в `main.tf` сослался на переменную `metadata = var.auth-ssh`*
 
 3. Найдите и удалите все более не используемые переменные проекта.
 4. Проверьте terraform plan (изменений быть не должно).
