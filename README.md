@@ -202,7 +202,8 @@ https://console.cloud.yandex.ru/folders/<ваш cloud_id>/vpc/security-groups.
    > variable auth-ssh {
    >   type = map
    >   default = {
-   >     ssh-keys = "ubuntu:ssh-rsa AAAAB3.................AqNVz baldin@debian"
+   >    serial-port-enable = 1 
+   >    ssh-keys = "ubuntu:ssh-rsa AAAAB3.................AqNVz baldin@debian"
    >   }
    > }
    > ```
